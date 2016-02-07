@@ -16,14 +16,15 @@ __PlanningPoker__ uses the following technologies:
 | [jQuery](http://jquery.com)                                   | jQuery                              |
 
 ## Install dependencies
-In order to install dependencies for __PlanningPoker__ you can run the following command from the command-line.
+In order to install dependencies for __PlanningPoker__ you can run the following command from the command-line 
+in the /dev folder.
 ```
 npm install
 ```
 
 ## Compile
 In order to run __PlanningPoker__ you may want to compile it first. 
-This is easily done by running `gulp` in the root of the project folder on the command-line.
+This is easily done by running `gulp` on the command-line in the /dev folder.
 ```
 gulp
 ```
@@ -34,3 +35,9 @@ Start the project by running index.js with NodeJS like so:
 node index.js
 ```
 The webapplication binds to port 3001.
+
+### Debug
+Run `node index.js` in the /dev folder while developing. This uses the uncompressed JavaScript files in the client.
+
+### Test release version (// TODO)
+Run `node index.js` in the /www folder to test the code against the minified JavaScript files.
