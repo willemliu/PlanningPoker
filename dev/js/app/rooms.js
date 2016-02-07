@@ -18,13 +18,12 @@ define([
   Rooms.prototype = {
     init: function() {
       console.log('Initialize Rooms');
-      
-      socket.on('msg', $.proxy(this.processMsg, this));
-      
+            
       this.addListeners();
     },
     
     addListeners: function() {
+      socket.on('msg', $.proxy(this.processMsg, this));
       $('#newRoom').on('click', $.proxy(this.newRoom, this));
       $('#joinRoom').on('click', $.proxy(this.joinRoom, this));
       $('#msg').on('click', $.proxy(this.msg, this));
@@ -37,12 +36,18 @@ define([
       socket.emit('newRoom', null, function(json) {
         roomNumber = json.roomNumber;
         $('#roomNumber').val(roomNumber);
+        if(typeof(json.msg) != 'undefined') {
+          alert(json.msg);
+        }
       });
     },
     
     joinRoom: function() {
       socket.emit('joinRoom', { roomNumber: $('#roomNumber').val() }, function(json) {
         roomNumber = json.roomNumber;
+        if(typeof(json.msg) != 'undefined') {
+          alert(json.msg);
+        }
       });
     },
     

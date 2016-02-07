@@ -13,9 +13,7 @@ io.on('connection', function(socket) {
   socket.on('joinRoom', rooms.joinRoom);
   socket.on('msg', rooms.message);
 
-  socket.on('disconnect', function() {
-    console.log('User disconnected', socket.id);
-  });
+  socket.on('disconnect', rooms.leaveRoom);
 });
 
 require('./app/controllers/static')(app, express);
