@@ -1,1 +1,22 @@
 $default-font-size: 18px;
+
+// Colors
+$black: #000;
+$blue: #4099FF;
+$green: #34af23;
+$orange: #f08a24;
+$red: #cc181e;
+$purple: #80397b;
+$white: white;
+
+// Defaults
+$defaultFont: verdana, arial;
+$bodyBackground: $blue;
+
+// Cards
+$cardBackground: $white;
+$normalCards: $green;
+$mediumCards: $orange;
+$highCards: $red;
+$highestCards: $purple;
+$miscCards: $black;
