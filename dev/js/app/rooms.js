@@ -2,11 +2,9 @@
  * Rooms
  */
 define([
-  'jquery',
-  'socketio'
-], function($, io) {
+  'jquery'
+], function($) {
   var instance = null;
-  var socket = io();
   var roomNumber;
   
   function Rooms(){
@@ -23,7 +21,7 @@ define([
     },
     
     addListeners: function() {
-      socket.on('msg', $.proxy(this.processMsg, this));
+      SOCKET.on('msg', $.proxy(this.processMsg, this));
       $('#newRoom').on('click', $.proxy(this.newRoom, this));
       $('#joinRoom').on('click', $.proxy(this.joinRoom, this));
       $('#msg').on('click', $.proxy(this.msg, this));
@@ -33,20 +31,24 @@ define([
      * Create a new room.
      */
     newRoom: function() {
-      socket.emit('newRoom', null, function(json) {
+      SOCKET.emit('newRoom', null, function(json) {
         roomNumber = json.roomNumber;
         $('#roomNumber').val(roomNumber);
         if(typeof(json.msg) != 'undefined') {
-          alert(json.msg);
+          console.log(json.msg);
         }
       });
     },
     
     joinRoom: function() {
-      socket.emit('joinRoom', { roomNumber: $('#roomNumber').val() }, function(json) {
+      if($('#roomNumber').val().length !== 4 || $('#name').val().length === 0) {
+        $(EVENT_BUS).trigger('PlanningPoker.joinRoom:error', $('.join-room'));
+        return;
+      }
+      SOCKET.emit('joinRoom', { roomNumber: $('#roomNumber').val() }, function(json) {
         roomNumber = json.roomNumber;
         if(typeof(json.msg) != 'undefined') {
-          alert(json.msg);
+          $(EVENT_BUS).trigger('PlanningPoker.joinRoom:joined', [$('.join-room'), json]);
         }
       });
     },
@@ -62,7 +64,7 @@ define([
      * msg
      */
     msg: function() {
-      socket.emit('msg', {roomNumber: roomNumber, msg: 'ladieda'});
+      SOCKET.emit('msg', {roomNumber: roomNumber, msg: 'ladieda'});
     },
     
     getInstance: function() {

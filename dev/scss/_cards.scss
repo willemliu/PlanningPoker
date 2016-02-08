@@ -1,8 +1,6 @@
-.poker-cards {
-  border: 5px solid white;
-  border-radius: 10px;
-
-  .cards-container {
+.seat {
+  display: none;
+  .poker-cards {
     display: flex;
     justify-content: space-between;
     flex-flow: row wrap;

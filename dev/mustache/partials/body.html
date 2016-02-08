@@ -1,18 +1,22 @@
+<h1 class="title">PokerPlanning</h1>
 <fieldset class="new-room">
-  <legend>New room</legend>
-  <input type="button" id="newRoom" name="newRoom" value="New room"/><br>
+  <legend>Host</legend>
+  <input type="button" id="newRoom" name="newRoom" value="New room"/>
 </fieldset>
+
 <fieldset class="join-room">
-  <legend>Join room</legend>
-  <input type="text" id="roomNumber" value="" placeholder="Room number"/>
+  <legend>Guest</legend>
+  <input type="text" id="roomNumber" minlength="4" maxlength="4" size="5" pattern="[0-9]{4}" required placeholder="Room nr" title="4 digits"/>
   <br>
-  <input type="text" id="name" value="" placeholder="Name"/>
+  <input type="text" id="name" value="" placeholder="Your name"/>
+  <br>
   <input type="button" id="joinRoom" name="joinRoom" value="Join room"/>
   <input type="button" id="msg" name="msg" value="Message"/>
 </fieldset>
-<fieldset class="poker-cards">
+
+<fieldset class="seat">
   <legend>Cards</legend>
-  <div class="cards-container">
+  <div class="poker-cards">
     <div class="card half">
       <div>1/2</div>
     </div>
@@ -50,4 +54,8 @@
       <div>?</div>
     </div>
   </div>
+</fieldset>
+
+<fieldset class="room">
+  <legend>Room</legend>
 </fieldset>

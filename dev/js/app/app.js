@@ -3,8 +3,9 @@
  */
 define([
   'jquery',
+  'app/appFlow',
   'app/rooms'
-], function($, Rooms) {
+], function($, AppFlow, Rooms) {
   var instance = null;
   
   function App(){
@@ -17,6 +18,7 @@ define([
     init: function() {
       console.log('Initialize app');
       
+      AppFlow.getInstance();
       Rooms.getInstance();
     },
     

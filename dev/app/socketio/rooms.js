@@ -47,6 +47,7 @@ Rooms.prototype = {
     for(var idx in rooms) {
       if(rooms[idx].roomNumber == json.roomNumber && rooms[idx].socketIds.indexOf(this.id) === -1) {
         rooms[idx].socketIds.push(this.id);
+        console.log('Room population', rooms[idx].socketIds.length);
       }
     }
     json.msg = 'Joined room ' + json.roomNumber;
@@ -66,8 +67,9 @@ Rooms.prototype = {
       // Remove room number association with socket id
       for(var idx in rooms) {
         while(rooms[idx].socketIds.indexOf(socketId) != -1) {
-          rooms[idx].socketIds.splice(this.id, 1);
+          var removedSocket = rooms[idx].socketIds.splice(rooms[idx].socketIds.indexOf(socketId), 1);
           roomNumber = rooms[idx].roomNumber;
+          console.log('Room', roomNumber, 'population', rooms[idx].socketIds.length, 'removed', removedSocket);
         }
         if(rooms[idx].socketIds.length === 0) {
           console.log('Cleanup empty room', roomNumber);

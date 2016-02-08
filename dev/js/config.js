@@ -18,10 +18,14 @@ requirejs.config({
   }
 );
 
+var EVENT_BUS = {};
+var SOCKET; // The one socket.io connection
+
 requirejs([
   'jquery',
+  'socketio',
   'app/app'
-], function($, App) {
-  
+], function($, io, App) {
+  SOCKET = io();
   App.getInstance();
 });
