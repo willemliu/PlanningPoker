@@ -25,10 +25,11 @@ npm install
 
 ## Compile
 In order to run __PlanningPoker__ you may want to compile it first. 
-This is easily done by running `gulp` on the command-line in the /dev folder.
+This is easily done by running the following command on the command-line in the /dev folder.
 ```
-gulp
+gulp release
 ```
+That will build all the CSS and JS files and copy the necessary files to the /www folder.
 
 ## Fire it up!
 Start the project by running index.js with NodeJS like so:
@@ -40,5 +41,12 @@ The webapplication binds to port 3001.
 ### Debug
 Run `node index.js` in the /dev folder while developing. This uses the uncompressed JavaScript files in the client.
 
-### Test release version (// TODO)
-Run `node index.js` in the /www folder to test the code against the minified JavaScript files.
+### Run release version
+Run `node index.js` in the /www folder.
+
+### Watch
+While in development you might want to watch the SCSS and JS files for changes and have them compiled as soon as possible.
+This is can be done by running the following command in the /dev folder:
+```
+gulp watch
+```

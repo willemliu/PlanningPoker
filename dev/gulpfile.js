@@ -7,6 +7,7 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var del = require('del');
 var rjs = require('requirejs');
 
 // Lint Task
@@ -48,6 +49,22 @@ gulp.task('build', function(cb){
   }, cb);
 });
 
+// Clear the release folder
+gulp.task('clean', function() {
+  return del.sync('../www/**', {force: true});
+});
+
+// Copy files to release folder
+gulp.task('copy_release', ['clean', 'lint', 'sass', 'build'], function() {
+  gulp.src('./app/**').pipe(gulp.dest('../www/app'));
+  gulp.src('./css/**').pipe(gulp.dest('../www/css'));
+  gulp.src('./dist/**').pipe(gulp.dest('../www/js'));
+  gulp.src('./img/**').pipe(gulp.dest('../www/img'));
+  gulp.src('./mustache/**').pipe(gulp.dest('../www/mustache'));
+  gulp.src('./index.js').pipe(gulp.dest('../www'));
+  return;
+});
+
 // Watch Files For Changes
 gulp.task('watch', function() {
     gulp.watch(['js/**/*.js'], ['lint', 'build']);
@@ -56,3 +73,5 @@ gulp.task('watch', function() {
 
 // Default Task
 gulp.task('default', ['lint', 'sass', 'build', 'watch']);
+// Release
+gulp.task('release', ['copy_release']);
