@@ -21,7 +21,6 @@ define([
     },
     
     addListeners: function() {
-      SOCKET.on('msg', $.proxy(this.processMsg, this));
       $('#newRoom').on('click', $.proxy(this.newRoom, this));
       $('#joinRoom').on('click', $.proxy(this.joinRoom, this));
       $('#msg').on('click', $.proxy(this.msg, this));
@@ -34,21 +33,22 @@ define([
       SOCKET.emit('newRoom', null, function(json) {
         roomNumber = json.roomNumber;
         $('#roomNumber').val(roomNumber);
-        if(typeof(json.msg) != 'undefined') {
-          console.log(json.msg);
-        }
+        $('.room legend').text('Room ' + json.roomNumber);
       });
     },
     
     joinRoom: function() {
       if($('#roomNumber').val().length !== 4 || $('#name').val().length === 0) {
-        $(EVENT_BUS).trigger('PlanningPoker.joinRoom:error', $('.join-room'));
+        $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('.join-room'));
         return;
       }
-      SOCKET.emit('joinRoom', { roomNumber: $('#roomNumber').val() }, function(json) {
+      SOCKET.emit('joinRoom', { 
+        name: $('#name').val(), 
+        roomNumber: $('#roomNumber').val() 
+      }, function(json) {
         roomNumber = json.roomNumber;
         if(typeof(json.msg) != 'undefined') {
-          $(EVENT_BUS).trigger('PlanningPoker.joinRoom:joined', [$('.join-room'), json]);
+          $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:joined', [$('.join-room'), json]);
         }
       });
     },

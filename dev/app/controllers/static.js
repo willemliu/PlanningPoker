@@ -7,4 +7,5 @@ module.exports = function(app, express) {
   app.use("/img", express.static('img')); // Expose /img folder as /img
   app.use("/css", express.static('css')); // Expose /css folder as /css
   app.use("/favicon.ico", express.static('img/favicon.ico')); // Expose /favicon.ico as /img/favicon.ico
+  app.use("/templates", express.static('mustache/partials')); // Expose /favicon.ico as /img/favicon.ico
 }

@@ -5,7 +5,6 @@ define([
   'jquery'
 ], function($) {
   var instance = null;
-  var screens = ['.new-room', '.join-room', 'poker-cards', 'room'];
   
   function AppFlow(){
     if(instance !== null){
@@ -17,8 +16,8 @@ define([
     init: function() {
       console.log('Initialize AppFlow');
       $(document).on('click', '#newRoom', this.showNewRoom);
-      $(EVENT_BUS).on('PlanningPoker.joinRoom:error', this.shakeGuest);
-      $(EVENT_BUS).on('PlanningPoker.joinRoom:joined', this.showCards);
+      $(EVENT_BUS).on('PlanningPoker.room:joinRoom:error', this.shakeGuest);
+      $(EVENT_BUS).on('PlanningPoker.room:joinRoom:joined', this.showCards);
     },
     
     /**
@@ -30,6 +29,7 @@ define([
       el.one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
         el.removeClass('shake');
       });
+      $(EVENT_BUS).trigger('PlanningPoker.appFlow:shakeGuest:done');
     },
     
     showNewRoom: function() {
@@ -40,6 +40,7 @@ define([
         $('.room').addClass('slide-in-bottom fade-in');
       });
       $('.join-room').addClass('slide-out-right fade-out');
+      $(EVENT_BUS).trigger('PlanningPoker.appFlow:showNewRoom:done');
     },
     
     showCards: function(e, el, json) {
@@ -51,6 +52,7 @@ define([
         $(this).removeClass('blink');
         $('.seat').addClass('slide-in-bottom fade-in');
       });
+      $(EVENT_BUS).trigger('PlanningPoker.appFlow:showCards:done');
     },
     
     getInstance: function() {

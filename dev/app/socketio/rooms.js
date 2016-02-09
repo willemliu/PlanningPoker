@@ -34,8 +34,22 @@ Rooms.prototype = {
     
     console.log('==> New room', roomNumber);
     if(callback !== null) {
-      callback({roomNumber: roomNumber, msg: 'New room opened ' + roomNumber});
+      callback({roomNumber: roomNumber});
     }
+  },
+  
+  /**
+   * Returns the room number for given socket.
+   * Assumes a socket can only be in 1 room at any given time.
+   */
+  getRoomNumber: function(socketId) {
+    console.log('Get room number', socketId);
+    for(var idx in rooms) {
+      if(rooms[idx].socketIds.indexOf(socketId) !== -1) {
+        return rooms[idx].roomNumber;
+      }
+    }
+    return null;
   },
   
   /**
@@ -45,6 +59,7 @@ Rooms.prototype = {
     var socket = this;
     instance.leaveRoom.apply(socket);
     socket.join(json.roomNumber);
+    json.socketId = socket.id;
     console.log('Joined room', json.roomNumber, 'by', socket.id);
     for(var idx in rooms) {
       // Prevent duplicate socket id insertion.
@@ -57,6 +72,7 @@ Rooms.prototype = {
     if(callback !== null) {
       callback(json);
     }
+    module.exports.io.to(json.roomNumber).emit('player joined', json);
   },
   
   /**
@@ -76,6 +92,7 @@ Rooms.prototype = {
         while(rooms[idx].socketIds.indexOf(socketId) != -1) {
           var removedSocket = rooms[idx].socketIds.splice(rooms[idx].socketIds.indexOf(socketId), 1);
           roomNumber = rooms[idx].roomNumber;
+          module.exports.io.to(roomNumber).emit('player left', { socketId: socketId });
           console.log('Room', roomNumber, 'population', rooms[idx].socketIds.length, 'removed', removedSocket);
         }
         if(rooms[idx].socketIds.length === 0) {
@@ -95,12 +112,21 @@ Rooms.prototype = {
   },
   
   /**
+   * Select card.
+   * {card: 3}
+   */
+  selectCard: function(json) {
+    //module.exports.io.to(json.roomNumber).emit('msg', json);
+    console.log('Select card', json.card, instance.getRoomNumber(this.id));
+  },
+  
+  /**
    * Send message to a room.
    * {roomNumber: '0234', msg: 'Hi all!' }
    */
   message: function(json) {
-    module.exports.io.to(json.roomNumber).emit('msg', json);
-    console.log('Send message to', json.roomNumber);
+    module.exports.io.to(instance.getRoomNumber(this.id)).emit('msg', json);
+    console.log('Send message to', instance.getRoomNumber(this.id));
   }
 
 };

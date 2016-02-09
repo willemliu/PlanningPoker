@@ -8,10 +8,9 @@
   <legend>Guest</legend>
   <input type="text" id="roomNumber" minlength="4" maxlength="4" size="5" pattern="[0-9]{4}" required placeholder="Room nr" title="4 digits"/>
   <br>
-  <input type="text" id="name" value="" placeholder="Your name"/>
+  <input type="text" id="name" value="" size="10" maxlength="10" placeholder="Your name"/>
   <br>
   <input type="button" id="joinRoom" name="joinRoom" value="Join room"/>
-  <input type="button" id="msg" name="msg" value="Message"/>
 </fieldset>
 
 <fieldset class="seat">
@@ -54,8 +53,11 @@
       <div>?</div>
     </div>
   </div>
+  <input type="button" id="msg" name="msg" value="Message"/>
+
 </fieldset>
 
 <fieldset class="room">
   <legend>Room</legend>
+  <div class="players"></div>
 </fieldset>

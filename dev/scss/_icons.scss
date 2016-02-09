@@ -1,0 +1,30 @@
+.checkmark {
+  display:inline-block;
+  width: 22px;
+  height: 22px;
+  background: $checkmarkColor;
+  border-radius: 50%;
+  -ms-transform: rotate(45deg); /* IE 9 */
+  -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+  transform: rotate(45deg);
+}
+
+.checkmark:before{
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 34px;
+  background-color: $white;
+  left: 42px;
+  top: 13px;
+}
+
+.checkmark:after{
+  content: '';
+  position: absolute;
+  width: 29px;
+  height: 9px;
+  background-color: $white;
+  left: 22px;
+  top: 46px;
+}

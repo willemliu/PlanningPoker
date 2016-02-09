@@ -4,8 +4,10 @@
 define([
   'jquery',
   'app/appFlow',
-  'app/rooms'
-], function($, AppFlow, Rooms) {
+  'app/cards',
+  'app/rooms',
+  'app/socketConfig'
+], function($, AppFlow, Cards, Rooms, SocketConfig) {
   var instance = null;
   
   function App(){
@@ -17,9 +19,12 @@ define([
   App.prototype = {
     init: function() {
       console.log('Initialize app');
-      
+      SocketConfig.getInstance();
       AppFlow.getInstance();
       Rooms.getInstance();
+      $(EVENT_BUS).on('PlanningPoker.appFlow:showCards:done', function() {
+        Cards.getInstance();
+      });
     },
     
     getInstance: function() {

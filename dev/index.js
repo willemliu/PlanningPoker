@@ -11,6 +11,7 @@ io.on('connection', function(socket) {
   console.log('User connected to SocketIO', socket.id);
   socket.on('newRoom', rooms.newRoom);
   socket.on('joinRoom', rooms.joinRoom);
+  socket.on('select card', rooms.selectCard);
   socket.on('msg', rooms.message);
 
   socket.on('disconnect', rooms.leaveRoom);
