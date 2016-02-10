@@ -44,7 +44,6 @@ define([
     },
     
     showCards: function(e, el, json) {
-      console.log(el, json);
       $('.join-room').addClass('blink');
       $('.join-room').one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
         $('.new-room').addClass('slide-out-right fade-out');

@@ -6,6 +6,7 @@ body {
 
 .title {
   color: $titleColor;
+  text-align: center;
 }
 
 fieldset {
@@ -47,5 +48,6 @@ input {
   &[type='button'] {
     background: $buttonColor;
     color: $white;
+    cursor: pointer;
   }
 }

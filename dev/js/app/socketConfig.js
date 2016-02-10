@@ -3,9 +3,10 @@
  */
 define([
   'jquery',
+  'app/cards',
   'app/players',
   'app/rooms'
-], function($, Players, Rooms) {
+], function($, Cards, Players, Rooms) {
   var instance = null;
   
   function SocketConfig(){
@@ -20,6 +21,8 @@ define([
       SOCKET.on('player joined', $.proxy(Players.getInstance().receivePlayers, Players.getInstance()));
       SOCKET.on('player left', $.proxy(Players.getInstance().removePlayer, Players.getInstance()));
       SOCKET.on('msg', $.proxy(Rooms.getInstance().processMsg, Rooms.getInstance()));
+      SOCKET.on('select card', $.proxy(Cards.getInstance().playerSelectedCard, Cards.getInstance()));
+      SOCKET.on('reshuffle', $.proxy(Cards.getInstance().hideCards, Cards.getInstance()));
     },
     
     getInstance: function() {

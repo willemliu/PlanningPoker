@@ -21,9 +21,15 @@ define([
     },
     
     addListeners: function() {
-      $('#newRoom').on('click', $.proxy(this.newRoom, this));
-      $('#joinRoom').on('click', $.proxy(this.joinRoom, this));
-      $('#msg').on('click', $.proxy(this.msg, this));
+      var room = this;
+      $('#newRoom').on('click', $.proxy(room.newRoom, room));
+      $('#joinRoom').on('click', $.proxy(room.joinRoom, room));
+      $('#roomNumber, #name').on("keyup", function(e) {
+        if(e.which === 13) {
+          e.preventDefault();
+          room.joinRoom();
+        }
+      });
     },
         
     /**
@@ -33,13 +39,14 @@ define([
       SOCKET.emit('newRoom', null, function(json) {
         roomNumber = json.roomNumber;
         $('#roomNumber').val(roomNumber);
-        $('.room legend').text('Room ' + json.roomNumber);
+        $('.room-number').text(json.roomNumber);
       });
     },
     
     joinRoom: function() {
+      if($('#roomNumber').val().length !== 4) $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#roomNumber'));
+      if($('#name').val().length === 0) $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#name'));
       if($('#roomNumber').val().length !== 4 || $('#name').val().length === 0) {
-        $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('.join-room'));
         return;
       }
       SOCKET.emit('joinRoom', { 
@@ -49,6 +56,8 @@ define([
         roomNumber = json.roomNumber;
         if(typeof(json.msg) != 'undefined') {
           $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:joined', [$('.join-room'), json]);
+        } else {
+          $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#roomNumber'));
         }
       });
     },
@@ -58,13 +67,6 @@ define([
      */
     processMsg: function(json) {
       console.log(JSON.stringify(json));
-    },
-    
-    /**
-     * msg
-     */
-    msg: function() {
-      SOCKET.emit('msg', {roomNumber: roomNumber, msg: 'ladieda'});
     },
     
     getInstance: function() {

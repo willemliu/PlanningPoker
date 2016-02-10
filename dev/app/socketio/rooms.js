@@ -17,11 +17,12 @@ Rooms.prototype = {
    */
   newRoom: function(json, callback) {
     var socket = this;
-    if(roomNumbers.length >= 9999) { callback({roomNumber: null, msg: 'No more rooms available. Please try again later.'}); return; }
-    var roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
-    while(roomNumbers.indexOf(roomNumber) != -1) {
-      roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
+    var roomNumber = instance.findEmptyRoom();
+    if(roomNumbers.length === null) {
+      callback({roomNumber: null, msg: 'No more rooms available. Please try again later.'});
+      return; 
     }
+    
     roomNumbers.push(roomNumber); // Add room number to array
     socket.join(roomNumber); // Let this socket join the room
 
@@ -37,15 +38,33 @@ Rooms.prototype = {
       callback({roomNumber: roomNumber});
     }
   },
+
+  /**
+   * Return vacant room number.
+   * Return null if all rooms are occupied.
+   */
+  findEmptyRoom: function() {
+    var roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
+    while(roomNumbers.indexOf(roomNumber) != -1) {
+      // Check if all rooms are taken. If all rooms are taken then return null.
+      if(roomNumbers.length >= 9999) {
+        roomNumber = null;
+        break;
+      }
+      roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
+    }
+    return roomNumber;
+  },
   
   /**
    * Returns the room number for given socket.
    * Assumes a socket can only be in 1 room at any given time.
    */
-  getRoomNumber: function(socketId) {
-    console.log('Get room number', socketId);
+  getRoomNumber: function() {
+    var socket = this;
+    console.log('Get room number', socket.id);
     for(var idx in rooms) {
-      if(rooms[idx].socketIds.indexOf(socketId) !== -1) {
+      if(rooms[idx].socketIds.indexOf(socket.id) !== -1) {
         return rooms[idx].roomNumber;
       }
     }
@@ -53,10 +72,16 @@ Rooms.prototype = {
   },
   
   /**
-   * Client joins a room.
+   * Client joins an existing room.
    */
   joinRoom: function(json, callback) {
     var socket = this;
+    // Check if room exists.
+    if(roomNumbers.indexOf(json.roomNumber) === -1) {
+      json.err = 'Room does not exist!';
+      callback(json);
+      return;
+    }
     instance.leaveRoom.apply(socket);
     socket.join(json.roomNumber);
     json.socketId = socket.id;
@@ -109,24 +134,6 @@ Rooms.prototype = {
     }
     
     console.log('Active rooms', roomNumbers);
-  },
-  
-  /**
-   * Select card.
-   * {card: 3}
-   */
-  selectCard: function(json) {
-    //module.exports.io.to(json.roomNumber).emit('msg', json);
-    console.log('Select card', json.card, instance.getRoomNumber(this.id));
-  },
-  
-  /**
-   * Send message to a room.
-   * {roomNumber: '0234', msg: 'Hi all!' }
-   */
-  message: function(json) {
-    module.exports.io.to(instance.getRoomNumber(this.id)).emit('msg', json);
-    console.log('Send message to', instance.getRoomNumber(this.id));
   }
 
 };
