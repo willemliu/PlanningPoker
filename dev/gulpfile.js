@@ -61,7 +61,8 @@ gulp.task('copy_release', ['clean', 'lint', 'sass', 'build'], function() {
   gulp.src('./dist/**').pipe(gulp.dest('../www/js'));
   gulp.src('./img/**').pipe(gulp.dest('../www/img'));
   gulp.src('./mustache/**').pipe(gulp.dest('../www/mustache'));
-  gulp.src('./index.js').pipe(gulp.dest('../www'));
+  gulp.src('./node_modules/**').pipe(gulp.dest('../www/node_modules'));
+  gulp.src('./planningPoker.js').pipe(gulp.dest('../www'));
   return;
 });
 

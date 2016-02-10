@@ -3,6 +3,7 @@
  */
 var rooms = [];
 var roomNumbers = [];
+var instance = null;
 
 var Rooms = function init(io) {
   console.log("Initialized Rooms Socket IO");
@@ -15,59 +16,109 @@ Rooms.prototype = {
    * Create a random room with unique room number.
    */
   newRoom: function(json, callback) {
-    if(roomNumbers.length >= 9999) { callback({roomNumber: null, msg: 'No more rooms available. Please try again later.'}); return; }
-    var roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
-    while(roomNumbers.indexOf(roomNumber) != -1) {
-      roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
+    var socket = this;
+    var roomNumber = instance.findEmptyRoom();
+    if(roomNumbers.length === null) {
+      callback({roomNumber: null, msg: 'No more rooms available. Please try again later.'});
+      return; 
     }
+    
     roomNumbers.push(roomNumber); // Add room number to array
-    this.join(roomNumber); // Let this socket join the room
+    socket.join(roomNumber); // Let this socket join the room
 
     // Store the rooms and socket id associations
     if( rooms.some(function(val) { return val.roomNumber == roomNumber }) === false ) {
-      rooms.push({roomNumber: roomNumber, socketIds: [this.id]});
+      rooms.push({roomNumber: roomNumber, socketIds: [socket.id]});
     } else {
-      for(var idx in rooms) {
-        if(rooms[idx].roomNumber == roomNumber && rooms[idx].socketIds.indexOf(socketId) === -1) {
-          rooms[idx].socketIds.push(this.id);
-        }
-      }
+      instance.joinRoom.call(socket);
     }
     
     console.log('==> New room', roomNumber);
-    callback({roomNumber: roomNumber, msg: 'New room opened ' + roomNumber});
+    if(callback !== null) {
+      callback({roomNumber: roomNumber});
+    }
+  },
+
+  /**
+   * Return vacant room number.
+   * Return null if all rooms are occupied.
+   */
+  findEmptyRoom: function() {
+    var roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
+    while(roomNumbers.indexOf(roomNumber) != -1) {
+      // Check if all rooms are taken. If all rooms are taken then return null.
+      if(roomNumbers.length >= 9999) {
+        roomNumber = null;
+        break;
+      }
+      roomNumber = ('0000' + Math.floor(Math.random()*10000)).slice(-4);
+    }
+    return roomNumber;
   },
   
   /**
-   * Client joins a room.
+   * Returns the room number for given socket.
+   * Assumes a socket can only be in 1 room at any given time.
+   */
+  getRoomNumber: function() {
+    var socket = this;
+    console.log('Get room number', socket.id);
+    for(var idx in rooms) {
+      if(rooms[idx].socketIds.indexOf(socket.id) !== -1) {
+        return rooms[idx].roomNumber;
+      }
+    }
+    return null;
+  },
+  
+  /**
+   * Client joins an existing room.
    */
   joinRoom: function(json, callback) {
-    this.join(json.roomNumber);
-    console.log('Joined room', json.roomNumber);
+    var socket = this;
+    // Check if room exists.
+    if(roomNumbers.indexOf(json.roomNumber) === -1) {
+      json.err = 'Room does not exist!';
+      callback(json);
+      return;
+    }
+    instance.leaveRoom.apply(socket);
+    socket.join(json.roomNumber);
+    json.socketId = socket.id;
+    console.log('Joined room', json.roomNumber, 'by', socket.id);
     for(var idx in rooms) {
-      if(rooms[idx].roomNumber == json.roomNumber && rooms[idx].socketIds.indexOf(this.id) === -1) {
-        rooms[idx].socketIds.push(this.id);
+      // Prevent duplicate socket id insertion.
+      if(rooms[idx].roomNumber == json.roomNumber && rooms[idx].socketIds.indexOf(socket.id) === -1) {
+        rooms[idx].socketIds.push(socket.id);
+        console.log('Room population', rooms[idx].socketIds.length);
       }
     }
     json.msg = 'Joined room ' + json.roomNumber;
-    callback(json);
+    if(callback !== null) {
+      callback(json);
+    }
+    module.exports.io.to(json.roomNumber).emit('player joined', json);
   },
   
   /**
    * Handle client disconnect.
    */
   leaveRoom: function() {
-    console.log('<== User disconnected', this.id);
+    var socket = this;
     // Remove socket id
     var roomNumber;
-    var socketId = this.id;
+    var socketId = socket.id;
 
     if( rooms.some(function(val, idx, arr) { return val.socketIds.indexOf(socketId) != -1 }) ) {
+      console.log('<== Leave room', socket.id);
       // Remove room number association with socket id
       for(var idx in rooms) {
+        // We don't expect duplicate socket ids. But we will remove them if it exists.
         while(rooms[idx].socketIds.indexOf(socketId) != -1) {
-          rooms[idx].socketIds.splice(this.id, 1);
+          var removedSocket = rooms[idx].socketIds.splice(rooms[idx].socketIds.indexOf(socketId), 1);
           roomNumber = rooms[idx].roomNumber;
+          module.exports.io.to(roomNumber).emit('player left', { socketId: socketId });
+          console.log('Room', roomNumber, 'population', rooms[idx].socketIds.length, 'removed', removedSocket);
         }
         if(rooms[idx].socketIds.length === 0) {
           console.log('Cleanup empty room', roomNumber);
@@ -83,19 +134,13 @@ Rooms.prototype = {
     }
     
     console.log('Active rooms', roomNumbers);
-  },
-  
-  /**
-   * Send message to a room.
-   * {roomNumber: '0234', msg: 'Hi all!' }
-   */
-  message: function(json) {
-    module.exports.io.to(json.roomNumber).emit('msg', json);
-    console.log('Send message to', json.roomNumber);
   }
 
 };
 
 module.exports = function(io) {
-  return new Rooms(io);
+  if(instance === null) {
+    instance = new Rooms(io);
+  }
+  return instance;
 };

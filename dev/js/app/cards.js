@@ -42,9 +42,36 @@ define([
       $('.room .players .player[data-socket-id="' + json.socketId + '"] .card.no-value').removeClass('no-value');
       // Set the value for the player if card is not shown yet.
       $('.room .players .player[data-socket-id="' + json.socketId + '"] .card:not(.show-value) .value').text(json.card);
+      $('.room .players .player[data-socket-id="' + json.socketId + '"] .card:not(.show-value)').attr('data-value', json.card);
       // Show cards when all players selected their cards.
       if($('.card.no-value').length === 0) {
         this.showCards();
+        this.showHighestOccurrence();
+      }
+    },
+    
+    showHighestOccurrence: function() {
+      var cards = $('.room .players .player .card');
+      var modeMap = {};
+      var maxCard = [], maxCount = 1;
+      cards.each(function() {
+        var cardVal = $(this).attr('data-value');
+        if(typeof(modeMap[cardVal]) == 'undefined') {
+          modeMap[cardVal] = 1;
+        } else {
+          modeMap[cardVal]++;          
+        }
+        if(modeMap[cardVal] > maxCount)
+        {
+          maxCard = [cardVal];
+          maxCount = modeMap[cardVal];
+        } else if(modeMap[cardVal] === maxCount) {
+          maxCard.push(cardVal);
+        }
+      });
+      // Highlight all cards of highest occurrence. Even the cards in the hand of the players.
+      for(var idx in maxCard) {
+        $('.card[data-value="' + maxCard[idx] + '"]').addClass('highlight');
       }
     },
     
@@ -59,9 +86,11 @@ define([
      */
     hideCards: function() {
       $('html').removeClass('cards-opened');
+      $('.card').removeClass('highlight')
       $('.room .players .player .card').removeClass('show-value').addClass('no-value');
       $('.seat .poker-cards .selected').removeClass('selected');
       $('.room .players .player .card .value').empty();
+      
     },
     
     getInstance: function() {

@@ -5,7 +5,7 @@ module.exports = function(app, fs, mustache) {
   console.log("Initialize Home controller");
 
   var data = {
-    title: 'Home',
+    title: 'PlanningPoker',
     html_classes: 'home'
   }; // wrap the data in a global object... (mustache starts from an object then parses)
   

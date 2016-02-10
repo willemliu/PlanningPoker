@@ -3,6 +3,11 @@ lib/../config.js
 ----------------
 lib/jquery-2.2.0.js
 lib/socket.io.js
+app/appFlow.js
+app/cards.js
 app/rooms.js
+lib/mustache.js
+app/players.js
+app/socketConfig.js
 app/app.js
 lib/../config.js
