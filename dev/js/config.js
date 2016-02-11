@@ -28,4 +28,9 @@ requirejs([
 ], function($, io, App) {
   SOCKET = io();
   App.getInstance();
+  
+  // When browser closes
+  window.onbeforeunload = function(e) {
+    SOCKET.disconnect();
+  };
 });
