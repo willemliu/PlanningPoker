@@ -16,7 +16,7 @@ define([
     init: function() {
       console.log('Initialize Cards');
       $(document).on('click', '.poker-cards .card', $.proxy(this.selectCard, this));
-      $('#reshuffle').on('click', $.proxy(this.reshuffle, this));
+      $(document).on('click', '#reshuffle', $.proxy(this.reshuffle, this));
     },
     
     reshuffle: function() {

@@ -3,11 +3,12 @@
  */
 define([
   'jquery',
+  'mustache',
   'app/appFlow',
   'app/cards',
   'app/rooms',
   'app/socketConfig'
-], function($, AppFlow, Cards, Rooms, SocketConfig) {
+], function($, Mustache, AppFlow, Cards, Rooms, SocketConfig) {
   var instance = null;
   
   function App(){
@@ -19,11 +20,33 @@ define([
   App.prototype = {
     init: function() {
       console.log('Initialize app');
+      
+      /**
+       * If this is started as app and not a website.
+       */
+      if($('html').hasClass('startApp')) {
+        console.log('Start as native app');
+        this.renderPage();
+      }
+      
       SocketConfig.getInstance();
       AppFlow.getInstance();
       Rooms.getInstance();
       $(EVENT_BUS).on('PlanningPoker.appFlow:showCards:done', function() {
         Cards.getInstance();
+      });
+    },
+    
+    /**
+     * Render the page for native app.
+     */
+    renderPage: function() {
+      jQuery.when(
+        $.get('/templates/partials/body.html'), 
+        $.get('/templates/partials/footer.html')
+      )
+      .done(function(body, footer) {
+        $('body').prepend(Mustache.render('{{>body}}{{>footer}}', null, {body: body[0], footer: footer[0]}));
       });
     },
     

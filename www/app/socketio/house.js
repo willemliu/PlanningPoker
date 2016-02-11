@@ -16,6 +16,7 @@ var House = function init(io) {
     socket.on('newRoom', rooms.newRoom);
     socket.on('joinRoom', rooms.joinRoom);
     socket.on('select card', instance.selectCard);
+    socket.on('show cards', instance.showCards);
     socket.on('reshuffle', instance.reshuffle);
 
     socket.on('disconnect', rooms.leaveRoom);
@@ -24,6 +25,12 @@ var House = function init(io) {
 
 House.prototype = {
   
+  
+  showCards: function(json) {
+    var socket = this;
+    json.roomNumber = rooms.getRoomNumber.apply(socket);
+    module.exports.io.to(json.roomNumber).emit('show cards');
+  },
   
   selectCard: function(json) {
     var socket = this;

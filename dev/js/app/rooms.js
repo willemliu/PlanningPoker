@@ -22,9 +22,9 @@ define([
     
     addListeners: function() {
       var room = this;
-      $('#newRoom').on('click', $.proxy(room.newRoom, room));
-      $('#joinRoom').on('click', $.proxy(room.joinRoom, room));
-      $('#roomNumber, #name').on("keyup", function(e) {
+      $(document).on('click', '#newRoom', $.proxy(room.newRoom, room));
+      $(document).on('click', '#joinRoom', $.proxy(room.joinRoom, room));
+      $(document).on('keyup', '#roomNumber, #name', function(e) {
         if(e.which === 13) {
           e.preventDefault();
           room.joinRoom();

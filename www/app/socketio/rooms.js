@@ -118,7 +118,7 @@ Rooms.prototype = {
           var removedSocket = rooms[idx].socketIds.splice(rooms[idx].socketIds.indexOf(socketId), 1);
           roomNumber = rooms[idx].roomNumber;
           module.exports.io.to(roomNumber).emit('player left', { socketId: socketId });
-          console.log('Room', roomNumber, 'population', rooms[idx].socketIds.length, 'removed', removedSocket);
+          console.log('Room', roomNumber, 'removed', removedSocket);
         }
         if(rooms[idx].socketIds.length === 0) {
           console.log('Cleanup empty room', roomNumber);

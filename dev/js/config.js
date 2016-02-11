@@ -26,7 +26,7 @@ requirejs([
   'socketio',
   'app/app'
 ], function($, io, App) {
-  SOCKET = io();
+  SOCKET = io('http://poker.willim.nl');
   App.getInstance();
   
   // When browser closes
