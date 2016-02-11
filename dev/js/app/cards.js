@@ -43,10 +43,9 @@ define([
       // Set the value for the player if card is not shown yet.
       $('.room .players .player[data-socket-id="' + json.socketId + '"] .card:not(.show-value) .value').text(json.card);
       $('.room .players .player[data-socket-id="' + json.socketId + '"] .card:not(.show-value)').attr('data-value', json.card);
-      // Show cards when all players selected their cards.
-      if($('.card.no-value').length === 0) {
-        this.showCards();
-        this.showHighestOccurrence();
+      // Only host shows cards when all players selected their cards.
+      if($('html.host').length > 0 && $('.card.no-value').length === 0) {
+        SOCKET.emit('show cards', {});
       }
     },
     
@@ -79,6 +78,7 @@ define([
       $('html').addClass('cards-opened');
       $('.room .players .player .card').addClass('show-value');
       $(EVENT_BUS).trigger('PlanningPoker.cards:showCards:done');
+      this.showHighestOccurrence();
     },
     
     /**
@@ -86,7 +86,7 @@ define([
      */
     hideCards: function() {
       $('html').removeClass('cards-opened');
-      $('.card').removeClass('highlight')
+      $('.card').removeClass('highlight');
       $('.room .players .player .card').removeClass('show-value').addClass('no-value');
       $('.seat .poker-cards .selected').removeClass('selected');
       $('.room .players .player .card .value').empty();

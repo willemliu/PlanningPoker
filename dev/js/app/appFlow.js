@@ -33,6 +33,7 @@ define([
     },
     
     showNewRoom: function() {
+      $('html').addClass('host');
       $('.new-room').addClass('blink');
       $('.new-room').one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
         $(this).hide();
