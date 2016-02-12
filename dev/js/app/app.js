@@ -46,7 +46,7 @@ define([
         $.get('/templates/partials/footer.html')
       )
       .done(function(body, footer) {
-        $('body').prepend(Mustache.render('{{>body}}{{>footer}}', null, {body: body[0], footer: footer[0]}));
+        $('main').prepend(Mustache.render('{{>body}}{{>footer}}', null, {body: body[0], footer: footer[0]}));
       });
     },
     

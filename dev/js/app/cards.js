@@ -92,6 +92,7 @@ define([
      */
     showHighestOccurrence: function(maxCard) {
       // Highlight all cards of highest occurrence. Even the cards in the hand of the players.
+      $('.highlight').removeClass('highlight');
       for(var idx in maxCard) {
         $('.card[data-value="' + maxCard[idx] + '"]').addClass('highlight');
       }
@@ -116,7 +117,7 @@ define([
       $('.room .players .player .card').removeClass('show-value').addClass('no-value');
       $('.seat .poker-cards .selected').removeClass('selected');
       $('.room .players .player .card .value').empty();
-      
+      $('.host [data-value]').attr('data-value', '');
     },
     
     getInstance: function() {

@@ -27,6 +27,16 @@
       color: $red;
     }
     
+    &[data-value="coffee"] {
+      background-image: url('/img/coffee.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      .value {
+        display: none !important;
+      }
+    }
+
     
     > div {
       text-align: center;

@@ -60,6 +60,7 @@ define([
         roomNumber = json.roomNumber;
         if(typeof(json.msg) != 'undefined') {
           $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:joined', [$('.join-room'), json]);
+          $('.username').text(json.name);
         } else {
           $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#roomNumber'));
         }
