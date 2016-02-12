@@ -22,7 +22,6 @@ define([
      * Receive the player into the room.
      */
     receivePlayers: function(json) {
-      console.log('player joined', json);
       $.get('/templates/partials/player.html', function(template) {
         var rendered = Mustache.render(template, json);
         // Remove the player first if player already is in the room
@@ -36,7 +35,6 @@ define([
      * Remove the player from the room.
      */
     removePlayer: function(json) {
-      console.log('player left', json);
       $('[data-socket-id="' + json.socketId + '"]').remove();
     },
     

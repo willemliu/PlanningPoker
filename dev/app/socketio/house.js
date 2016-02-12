@@ -1,5 +1,6 @@
 /**
  * House Socket IO connections
+ * Handles all incoming socket events and passes it to their handlers.
  */
 var rooms;
 var cards;
@@ -29,7 +30,7 @@ House.prototype = {
   showCards: function(json) {
     var socket = this;
     json.roomNumber = rooms.getRoomNumber.apply(socket);
-    module.exports.io.to(json.roomNumber).emit('show cards');
+    module.exports.io.to(json.roomNumber).emit('show cards', json);
   },
   
   selectCard: function(json) {

@@ -45,11 +45,11 @@ define([
       $('.room .players .player[data-socket-id="' + json.socketId + '"] .card:not(.show-value)').attr('data-value', json.card);
       // Only host shows cards when all players selected their cards.
       if($('html.host').length > 0 && $('.card.no-value').length === 0) {
-        SOCKET.emit('show cards', {});
+        SOCKET.emit('show cards', {highestOccurrence: this.getHighestOccurrence()});
       }
     },
     
-    showHighestOccurrence: function() {
+    getHighestOccurrence: function() {
       var cards = $('.room .players .player .card');
       var modeMap = {};
       var maxCard = [], maxCount = 1;
@@ -68,17 +68,21 @@ define([
           maxCard.push(cardVal);
         }
       });
+      return maxCard;
+    },
+    
+    showHighestOccurrence: function(maxCard) {
       // Highlight all cards of highest occurrence. Even the cards in the hand of the players.
       for(var idx in maxCard) {
         $('.card[data-value="' + maxCard[idx] + '"]').addClass('highlight');
       }
     },
     
-    showCards: function() {
+    showCards: function(json) {
       $('html').addClass('cards-opened');
       $('.room .players .player .card').addClass('show-value');
       $(EVENT_BUS).trigger('PlanningPoker.cards:showCards:done');
-      this.showHighestOccurrence();
+      this.showHighestOccurrence(json.highestOccurrence);
     },
     
     /**

@@ -27,6 +27,8 @@ requirejs([
   'app/app'
 ], function($, io, App) {
   SOCKET = io('http://poker.willim.nl');
+  // Switch to socket below when debugging locally.
+  //SOCKET = io();
   App.getInstance();
   
   // When browser closes

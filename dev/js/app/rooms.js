@@ -25,6 +25,7 @@ define([
       $(document).on('click', '#newRoom', $.proxy(room.newRoom, room));
       $(document).on('click', '#joinRoom', $.proxy(room.joinRoom, room));
       $(document).on('keyup', '#roomNumber, #name', function(e) {
+        // Enter key
         if(e.which === 13) {
           e.preventDefault();
           room.joinRoom();
@@ -43,6 +44,9 @@ define([
       });
     },
     
+    /**
+     * Join an existing room.
+     */
     joinRoom: function() {
       if($('#roomNumber').val().length !== 4) $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#roomNumber'));
       if($('#name').val().length === 0) $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#name'));
