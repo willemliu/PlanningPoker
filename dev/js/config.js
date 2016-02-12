@@ -33,6 +33,9 @@ requirejs([
   
   // When browser closes
   window.onbeforeunload = function(e) {
+    if($('html').hasClass('host')) {
+      SOCKET.emit('host left');
+    }
     SOCKET.disconnect();
   };
 });

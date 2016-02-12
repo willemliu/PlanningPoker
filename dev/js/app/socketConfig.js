@@ -25,6 +25,10 @@ define([
       SOCKET.on('select card', $.proxy(Cards.getInstance().playerSelectedCard, Cards.getInstance()));
       SOCKET.on('show cards', $.proxy(Cards.getInstance().showCards, Cards.getInstance()));
       SOCKET.on('reshuffle', $.proxy(Cards.getInstance().hideCards, Cards.getInstance()));
+      SOCKET.on('host left', function() {
+        alert('Host has left');
+        window.location = '/';
+      });
     },
     
     getInstance: function() {

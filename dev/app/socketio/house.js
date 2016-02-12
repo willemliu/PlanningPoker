@@ -20,12 +20,17 @@ var House = function init(io) {
     socket.on('show cards', instance.showCards);
     socket.on('reshuffle', instance.reshuffle);
 
+    socket.on('host left', instance.hostLeft);
     socket.on('disconnect', rooms.leaveRoom);
   });
 };
 
 House.prototype = {
   
+  hostLeft: function() {
+    var socket = this;
+    module.exports.io.to(rooms.getRoomNumber.apply(socket)).emit('host left');
+  },
   
   showCards: function(json) {
     var socket = this;
