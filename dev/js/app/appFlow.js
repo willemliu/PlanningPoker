@@ -34,22 +34,25 @@ define([
     
     showNewRoom: function() {
       $('html').addClass('host');
+      
+      // Effects
       $('.new-room').addClass('blink');
-      $('.new-room').one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
+      $('.join-room').addClass('slide-out-right fade-out');
+      // Effects done
+      $('.new-room, .join-room').one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
         $(this).hide();
-        $(this).removeClass('blink');
+        $(this).removeClass('blink slide-out-right fade-out');
         $('.room').addClass('slide-in-bottom fade-in');
       });
-      $('.join-room').addClass('slide-out-right fade-out');
       $(EVENT_BUS).trigger('PlanningPoker.appFlow:showNewRoom:done');
     },
     
     showCards: function(e, el, json) {
       $('.join-room').addClass('blink');
-      $('.join-room').one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
-        $('.new-room').addClass('slide-out-right fade-out');
+      $('.new-room').addClass('slide-out-top fade-out');
+      $('.new-room, .join-room').one('animationend	animationend	webkitAnimationEnd	oanimationend	MSAnimationEnd', function() {
         $(this).hide();
-        $(this).removeClass('blink');
+        $(this).removeClass('blink slide-out-right fade-out');
         $('.seat').addClass('slide-in-bottom fade-in');
       });
       $(EVENT_BUS).trigger('PlanningPoker.appFlow:showCards:done');
