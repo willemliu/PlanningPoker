@@ -1,5 +1,6 @@
 /**
  * SocketConfig configures the socket.io bindings
+ * Bind socket events to their handlers.
  */
 define([
   'jquery',

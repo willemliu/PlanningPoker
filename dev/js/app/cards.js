@@ -19,16 +19,25 @@ define([
       $(document).on('click', '#reshuffle', $.proxy(this.reshuffle, this));
     },
     
+    /**
+     * Resets the game for every player in the same room.
+     */
     reshuffle: function() {
       if(confirm('Reset the game?')) {
         SOCKET.emit('reshuffle');
       }
     },
     
+    /**
+     * Reset your selected card.
+     */
     resetSelection: function() {
       $('.poker-cards .selected').removeClass('selected');
     },
     
+    /**
+     * Called when you select a card.
+     */
     selectCard: function(e) {
       // Only allow selection changes when cards are not opened.
       if($('html:not(.cards-opened)').length === 1) {
@@ -38,6 +47,9 @@ define([
       }
     },
     
+    /**
+     * Called when a player selects a card.
+     */
     playerSelectedCard: function(json) {
       $('.room .players .player[data-socket-id="' + json.socketId + '"] .card.no-value').removeClass('no-value');
       // Set the value for the player if card is not shown yet.
@@ -49,6 +61,9 @@ define([
       }
     },
     
+    /**
+     * Returns array holding card value(s) of highest occurring card(s).
+     */
     getHighestOccurrence: function() {
       var cards = $('.room .players .player .card');
       var modeMap = {};
@@ -71,6 +86,10 @@ define([
       return maxCard;
     },
     
+    /**
+     * Highlight card with highest occurrence.
+     * maxCard: Array - Holds card value(s) of most occurring card(s).
+     */
     showHighestOccurrence: function(maxCard) {
       // Highlight all cards of highest occurrence. Even the cards in the hand of the players.
       for(var idx in maxCard) {
@@ -78,6 +97,9 @@ define([
       }
     },
     
+    /**
+     * Show the cards.
+     */
     showCards: function(json) {
       $('html').addClass('cards-opened');
       $('.room .players .player .card').addClass('show-value');
