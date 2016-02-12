@@ -63,6 +63,7 @@ gulp.task('copy_release', ['clean', 'lint', 'sass', 'build'], function() {
   gulp.src('./mustache/**').pipe(gulp.dest('../www/mustache'));
   gulp.src('./node_modules/**').pipe(gulp.dest('../www/node_modules'));
   gulp.src('./planningPoker.js').pipe(gulp.dest('../www'));
+  gulp.src('./index.html').pipe(gulp.dest('../www'));
   gulp.src('./.gitignore').pipe(gulp.dest('../www'));
   return;
 });

@@ -1,0 +1,36 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-insomnia": {
+            "PACKAGE_NAME": "PlanningPoker"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "PlanningPoker"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/cordova-plugin-insomnia/www/Insomnia.js",
+            "id": "cordova-plugin-insomnia.Insomnia",
+            "pluginId": "cordova-plugin-insomnia",
+            "clobbers": [
+                "window.plugins.insomnia"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-insomnia/src/windows/InsomniaProxy.js",
+            "id": "cordova-plugin-insomnia.InsomniaProxy",
+            "pluginId": "cordova-plugin-insomnia",
+            "merges": [
+                ""
+            ]
+        }
+    ]
+}
