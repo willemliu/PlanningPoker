@@ -22,6 +22,7 @@ var IS_APP = window.location.href.indexOf( 'http://' ) === -1 && window.location
 var EVENT_BUS = {};
 var SOCKET; // The one socket.io connection
 var BASE_URL = 'http://poker.willim.nl/';
+var START_PAGE = '/';
 
 requirejs([
   'jquery',
@@ -53,6 +54,8 @@ requirejs([
    */
   if(!IS_APP) {
     DeviceReady.getInstance();
+  } else {
+    START_PAGE = 'index.html';
   }
   
 });

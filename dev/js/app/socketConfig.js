@@ -27,7 +27,7 @@ define([
       SOCKET.on('reshuffle', $.proxy(Cards.getInstance().hideCards, Cards.getInstance()));
       SOCKET.on('host left', function() {
         alert('Host has left');
-        window.location = '/';
+        window.location = START_PAGE;
       });
     },
     

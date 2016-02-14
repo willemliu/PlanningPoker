@@ -17,7 +17,7 @@ define([
       console.log('Initialize AppFlow');
       $(document).on('click', '#newRoom', this.showNewRoom);
       $(document).on('click', '#leaveRoom', function() {
-        window.location = '/';
+        window.location = START_PAGE;
       });
       $(EVENT_BUS).on('PlanningPoker.room:joinRoom:error', this.shakeGuest);
       $(EVENT_BUS).on('PlanningPoker.room:joinRoom:joined', this.showCards);
