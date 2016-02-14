@@ -55,7 +55,7 @@ gulp.task('clean', function() {
   return del.sync('../www/**', {force: true});
 });
 
-// Copy files to release folder
+// Release as website.
 gulp.task('copy_release', ['clean', 'lint', 'sass', 'build'], function() {
   gulp.src('./app/**').pipe(gulp.dest('../www/app'));
   gulp.src('./css/**').pipe(gulp.dest('../www/css'));
@@ -66,6 +66,16 @@ gulp.task('copy_release', ['clean', 'lint', 'sass', 'build'], function() {
   gulp.src('./planningPoker.js').pipe(gulp.dest('../www'));
   gulp.src('./index.html').pipe(gulp.dest('../www'));
   gulp.src('./.gitignore').pipe(gulp.dest('../www'));
+  gulp.src('./privacy.txt').pipe(gulp.dest('../www'));
+});
+
+// Release as app.
+gulp.task('copy_release_app', ['clean', 'lint', 'sass', 'build'], function() {
+  gulp.src('./css/**').pipe(gulp.dest('../www/css'));
+  gulp.src('./dist/**').pipe(gulp.dest('../www/js'));
+  gulp.src('./img/**').pipe(gulp.dest('../www/img'));
+  gulp.src('./mustache/**').pipe(gulp.dest('../www/mustache'));
+  gulp.src('./index.html').pipe(gulp.dest('../www'));
 });
 
 // Watch Files For Changes
@@ -76,5 +86,7 @@ gulp.task('watch', function() {
 
 // Default Task
 gulp.task('default', ['lint', 'sass', 'build', 'watch']);
-// Release
-gulp.task('release', ['copy_release']);
+// Release website
+gulp.task('release', ['copy_release']);// Release
+// Release app
+gulp.task('releaseApp', ['copy_release_app']);
