@@ -10,4 +10,5 @@ app/rooms.js
 app/players.js
 app/socketConfig.js
 app/app.js
+app/deviceReady.js
 lib/../config.js

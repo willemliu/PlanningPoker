@@ -21,6 +21,7 @@ gulp.task('lint', function() {
 gulp.task('sass', function() {
     return gulp.src('scss/**/main.scss')
         .pipe(sass({ compass: true, bundleExec: true, outputStyle: 'compressed', sourcemap: true, sourcemapPath: '/css' }))
+        .pipe(rename("styles.css"))
         .pipe(gulp.dest('css'));
 });
 
@@ -65,7 +66,6 @@ gulp.task('copy_release', ['clean', 'lint', 'sass', 'build'], function() {
   gulp.src('./planningPoker.js').pipe(gulp.dest('../www'));
   gulp.src('./index.html').pipe(gulp.dest('../www'));
   gulp.src('./.gitignore').pipe(gulp.dest('../www'));
-  return;
 });
 
 // Watch Files For Changes

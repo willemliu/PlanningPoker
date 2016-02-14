@@ -42,8 +42,8 @@ define([
      */
     renderPage: function() {
       jQuery.when(
-        $.get('/templates/partials/body.html'), 
-        $.get('/templates/partials/footer.html')
+        $.get(BASE_URL + '/templates/partials/body.html'), 
+        $.get(BASE_URL + '/templates/partials/footer.html')
       )
       .done(function(body, footer) {
         $('main').prepend(Mustache.render('{{>body}}{{>footer}}', null, {body: body[0], footer: footer[0]}));

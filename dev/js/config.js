@@ -18,24 +18,41 @@ requirejs.config({
   }
 );
 
+var IS_APP = window.location.href.indexOf( 'http://' ) === -1 && window.location.href.indexOf( 'https://' ) === -1;
 var EVENT_BUS = {};
 var SOCKET; // The one socket.io connection
+var BASE_URL = 'http://poker.willim.nl/';
 
 requirejs([
   'jquery',
   'socketio',
-  'app/app'
-], function($, io, App) {
-  SOCKET = io('http://poker.willim.nl');
-  // Switch to socket below when debugging locally.
-  //SOCKET = io();
-  App.getInstance();
+  'app/app',
+  'app/deviceReady'
+], function($, io, App, DeviceReady) {
   
-  // When browser closes
-  window.onbeforeunload = function(e) {
-    if($('html').hasClass('host')) {
-      SOCKET.emit('host left');
-    }
-    SOCKET.disconnect();
-  };
+  /**
+   * APP START
+   */
+  document.addEventListener('deviceready', function() {
+    SOCKET = io('http://poker.willim.nl');
+    // Switch to socket below when debugging locally.
+    //SOCKET = io();
+    App.getInstance();
+    
+    // When browser closes
+    window.onbeforeunload = function(e) {
+      if($('html').hasClass('host')) {
+        SOCKET.emit('host left');
+      }
+      SOCKET.disconnect();
+    };
+  });
+  
+  /**
+   * Emulate deviceready event
+   */
+  if(!IS_APP) {
+    DeviceReady.getInstance();
+  }
+  
 });
