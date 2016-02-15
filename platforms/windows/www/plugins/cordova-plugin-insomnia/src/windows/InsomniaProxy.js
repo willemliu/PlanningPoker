@@ -1,5 +1,4 @@
-cordova.define("cordova-plugin-insomnia.InsomniaProxy", function(require, exports, module) {
-
+﻿cordova.define("cordova-plugin-insomnia.InsomniaProxy", function(require, exports, module) { 
 var displayRequest = null;
 
 var handleAsyncError = function(handler,msg) {

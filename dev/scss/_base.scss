@@ -2,11 +2,28 @@ body {
   background: $bodyBackground;
   font-family: $defaultFont;
   margin: 0;
+  color: $white;
+
+  background-image: url('/img/bg.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+
+  
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently
+                                  not supported by any browser */
 }
 
 .title {
   color: $titleColor;
+  text-shadow: -1px 0 green,0 1px green,1px 0 green,0 -1px green;
   text-align: center;
+  font-size: 1.2rem;
 }
 
 main {
@@ -22,26 +39,23 @@ footer {
 }
 
 fieldset {
-  border: 5px solid white;
-  border-radius: 10px;
+  border: 1px solid white;
   font-size: 1rem;
-  font-weight: bold;
   text-align: center;
+  text-shadow: -1px 0 green,0 1px green,1px 0 green,0 -1px green;
+  color: $white;
   
   &.new-room {
     text-align: center;
     legend {
-      color: $red;
       text-align: left;
     }
   }
   &.join-room legend {
-    color: $purple;
     text-align: right;
   }
   &.seat legend,
   &.room legend  {
-    color: $white;
   }
   
 }

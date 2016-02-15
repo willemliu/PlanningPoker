@@ -6,24 +6,25 @@
     flex-flow: row wrap;
     
     .card {
-      background: $white;
+      background: $black;
       font-size: 1.5rem;
       font-weight: bold;
-      border: 5px solid $normalCards;
+      border: 2px solid $normalCards;
       height: 75px;
       min-width: 75px;
       max-width: 75px;
-      border-radius: 10px;
       display: table;
       cursor: pointer;
-      margin: .25rem;
+      margin: .1rem;
       opacity: 0.5;
       transition: .4s all;
       &.highlight {
+        background: #999;
         color: $red;
         opacity: 1;
         
         &.selected {
+          background: $white;
           color: $green;
         }
       }

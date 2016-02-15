@@ -24,7 +24,7 @@ define([
       /**
        * If this is started as app and not a website.
        */
-      if($('html').hasClass('startApp')) {
+      if($('html').hasClass('app')) {
         console.log('Start as native app');
         this.renderPage();
       }

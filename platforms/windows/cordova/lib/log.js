@@ -20,66 +20,43 @@
 // requires
 var path         = require('path'),
     et           = require('elementtree'),
-    ConfigParser = require('./ConfigParser.js'),
-    nopt         = require('nopt');
-
-var spawn = require('cordova-common').superspawn.spawn;
+    Q            = require('q'),
+    cp           = require('child_process'),
+    ConfigParser = require('./ConfigParser.js');
 
 // paths
 var platformRoot = path.join(__dirname, '..', '..'),
     projectRoot  = path.join(platformRoot, '..', '..'),
     configPath   = path.join(projectRoot, 'config.xml');
 
-//constants
-var APP_TRACING_LOG = 'Microsoft-Windows-AppHost/ApplicationTracing',
-    ADMIN_LOG       = 'Microsoft-Windows-AppHost/Admin';
-
 // variables
 var appTracingInitialState = null,
     appTracingCurrentState = null,
-    adminInitialState      = null,
-    adminCurrentState      = null,
-    timers                 = [],
+    adminInitialState = null,
+    adminCurrentState = null,
     appName;
 
 /*
  * Gets windows AppHost/ApplicationTracing and AppHost/Admin logs
  * and prints them to console
  */
-module.exports.run = function(args) {
-    var startTime = new Date(new Date().getTime() - 10 * 60 * 1000).toISOString(), // show last 10 minutes by default
-        knownOpts = { 'minutes' : Number, 'dump' : Boolean, 'help' : Boolean },
-        shortHands = { 'mins' : ['--minutes'], 'h' : ['--help'] },
-        parsedOpts = nopt(knownOpts, shortHands, args, 0);
-
-    if (parsedOpts.help) {
-        module.exports.help();
-        return;
-    }
-    if (parsedOpts.dump) {
-        if (parsedOpts.minutes) {
-            startTime = new Date(new Date().getTime() - parsedOpts.minutes * 60 * 1000).toISOString();
-        }
-        dumpLogs(startTime);
-        return;
-    }
-
-    getLogState(ADMIN_LOG).then(function (state) {
+module.exports.run = function() {
+    getLogState('Microsoft-Windows-AppHost/Admin').then(function (state) {
         adminInitialState = adminCurrentState = state;
-        return getLogState(APP_TRACING_LOG);
+        return getLogState('Microsoft-Windows-AppHost/ApplicationTracing');
     }).then(function (state) {
         appTracingInitialState = appTracingCurrentState = state;
         if (!adminCurrentState) {
-            return enableChannel(ADMIN_LOG).then(function () {
-                return getLogState(ADMIN_LOG);
+            return enableChannel('Microsoft-Windows-AppHost/Admin').then(function () {
+                return getLogState('Microsoft-Windows-AppHost/Admin');
             }).then(function (state) {
                 adminCurrentState = state;
             });
         }
     }).then(function () {
         if (!appTracingCurrentState) {
-            return enableChannel(APP_TRACING_LOG).then(function () {
-                return getLogState(APP_TRACING_LOG);
+            return enableChannel('Microsoft-Windows-AppHost/ApplicationTracing').then(function () {
+                return getLogState('Microsoft-Windows-AppHost/ApplicationTracing');
             }).then(function (state) {
                 appTracingCurrentState = state;
             });
@@ -97,8 +74,8 @@ module.exports.run = function(args) {
         }
     }).then(function () {
         console.log('Now printing logs. To stop, please press Ctrl+C once.');
-        startLogging(ADMIN_LOG);
-        startLogging(APP_TRACING_LOG);
+        startLogging('Microsoft-Windows-AppHost/Admin');
+        startLogging('Microsoft-Windows-AppHost/ApplicationTracing');
     }).catch(function (error) {
         console.error(error);
     });
@@ -120,29 +97,13 @@ module.exports.run = function(args) {
     });
 };
 
-module.exports.help = function() {
-    console.log();
-    console.log('Usage: ' + path.relative(process.cwd(), path.join(platformRoot, 'cordova', 'log [options]')));
-    console.log('Continuously prints your app logs to the command line.');
-    console.log();
-    console.log('Options:');
-    console.log('  --dump: Dumps logs to console instead of continuous output.');
-    console.log('  --mins <minutes>: Used only with --dump. Dumps logs starting from this much minutes back.');
-    console.log();
-    console.log('  Example: ' + path.relative(process.cwd(), path.join(platformRoot, 'cordova', 'log --dump --mins 5')));
-    process.exit(0);
-};
-
 function exitGracefully(exitCode) {
     if (appTracingInitialState === false && appTracingCurrentState === true) {
-        disableChannel(APP_TRACING_LOG);
+        disableChannel('Microsoft-Windows-AppHost/ApplicationTracing');
     }
     if (adminInitialState === false && adminCurrentState === true) {
-        disableChannel(ADMIN_LOG);
+        disableChannel('Microsoft-Windows-AppHost/Admin');
     }
-    timers.forEach(function (timer) {
-        clearInterval(timer);
-    });
     // give async call some time to execute
     console.log('Exiting in 2 seconds. Please don\'t interrupt the process.');
     setTimeout(function() {
@@ -152,47 +113,26 @@ function exitGracefully(exitCode) {
 
 function startLogging(channel) {
     var startTime = new Date().toISOString();
-    timers.push(setInterval(function() {
-        getEvents(channel, startTime).then(function(events) {
-            events.forEach(function (evt) {
-                startTime = evt.timeCreated;
-                console.log(stringifyEvent(evt));
-            });
-        });
-    }, 1000));
-}
-
-function dumpLogs(startTime) {
-    console.log('Dumping logs starting from ' + startTime);
-    var appTracingEvents, adminEvents;
-    getEvents(APP_TRACING_LOG, startTime).then(function (evts) {
-        appTracingEvents = evts;
-        return getEvents(ADMIN_LOG, startTime);
-    }).then(function(evts) {
-        adminEvents = evts;
-        appTracingEvents.concat(adminEvents)
-        .sort(function(evt1, evt2) {
-            if (evt1.timeCreated < evt2.timeCreated) {
-                return -1;
-            } else if (evt1.timeCreated > evt2.timeCreated) {
-                return 1;
+    setInterval(function() {
+        var command = 'wevtutil qe ' + channel + ' /q:"*[System [(TimeCreated [@SystemTime>\'' + startTime + '\'])]]" /e:root';
+        cp.exec(command, function (error, stdout, stderr) {
+            if (error) {
+                throw new Error('Failed to run wevtutil command. ' + error);
+            } else {
+                parseEvents(stdout).forEach(function (evt) {
+                    startTime = evt.timeCreated;
+                    console.log(stringifyEvent(evt));
+                });
             }
-            return 0;
-        })
-        .forEach(function(evt) {
-            console.log(stringifyEvent(evt));
         });
-    });
+    }, 1000);
 }
 
-function getEvents(channel, startTime) {
-    var command = 'wevtutil';
-    var args = ['qe', channel, '/q:"*[System [(TimeCreated [@SystemTime>\'' + startTime + '\'])]]"', '/e:root'];
-    return spawn(command, args)
-    .then(function(stdout) {
-        return parseEvents(stdout);
-    });
-}
+module.exports.help = function() {
+    console.log('Usage: ' + path.relative(process.cwd(), path.join(platformRoot, 'cordova', 'log')));
+    console.log('Continuously prints the windows logs output to the command line.');
+    process.exit(0);
+};
 
 function getElementValue(et, element, attribute) {
     var result;
@@ -202,7 +142,7 @@ function getElementValue(et, element, attribute) {
         if (!!attribute) {
             result = found[0].get(attribute);
         } else {
-            result = found[0].text;
+            result = found[0].text; 
         }
     }
 
@@ -216,12 +156,12 @@ function parseEvents(output) {
 
     events.forEach(function (event) {
         // Get only informative logs
-        if ((getElementValue(event, './System/Channel') === ADMIN_LOG) &&
+        if ((getElementValue(event, './System/Channel') === 'Microsoft-Windows-AppHost/Admin') &&
             (typeof getElementValue(event, './UserData/WWAUnhandledApplicationException') === 'undefined') &&
             (typeof getElementValue(event, './UserData/WWATerminateApplication') === 'undefined')) {
             return;
         }
-        if ((getElementValue(event, './System/Channel') === APP_TRACING_LOG) &&
+        if ((getElementValue(event, './System/Channel') === 'Microsoft-Windows-AppHost/ApplicationTracing') &&
             (typeof getElementValue(event, './UserData/WWADevToolBarLog') === 'undefined')) {
             return;
         }
@@ -263,7 +203,7 @@ function parseEvents(output) {
             result.displayName = undefined;
         }
 
-        // cut out uninformative fields
+        // cut out uninformative fields 
         if ((result.line === '0') && (result.column === '0')) {
             result.line = undefined;
             result.column = undefined;
@@ -329,16 +269,14 @@ function stringifyEvent(event) {
 }
 
 function getLogState(channel) {
-    return spawn('wevtutil', ['get-log', channel])
-    .then(function(output) {
+    return exec('wevtutil get-log "' + channel + '"').then(function(output) {
         return output.indexOf('enabled: true') != -1;
     });
 }
 
 function enableChannel(channel) {
-    return spawn('wevtutil', ['set-log', channel, '/e:false', '/q:true'])
-    .then(function() {
-        return spawn('wevtutil', ['set-log', channel, '/e:true', '/rt:true', '/ms:4194304','/q:true']);
+    return exec('wevtutil set-log "' + channel + '" /e:false /q:true').then(function() {
+        return exec('wevtutil set-log "' + channel + '" /e:true /rt:true /ms:4194304 /q:true');
     }, function() {
         console.warn('Cannot enable log channel: ' + channel);
         console.warn('Try running the script with administrator privileges.');
@@ -347,5 +285,16 @@ function enableChannel(channel) {
 
 function disableChannel(channel) {
     console.log('Disabling channel ' + channel);
-    spawn('wevtutil', ['set-log', channel, '/e:false', '/q:true']);
+    exec('wevtutil set-log "' + channel + '" /e:false /q:true');
+}
+
+function exec(command) {
+    var d = Q.defer();
+    cp.exec(command, function (error, stdout) {
+        if (error) {
+            d.reject('An error occured while executing following command:\n' + command + '\n' + error);
+        }
+        d.resolve(stdout);
+    });
+    return d.promise;
 }

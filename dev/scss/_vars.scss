@@ -13,10 +13,10 @@ $purple: #80397b;
 $white: white;
 
 // Defaults
-$defaultFont: verdana, arial;
-$bodyBackground: $blue;
+$defaultFont: lucida sans unicode, trebuchet ms, verdana, arial;
+$bodyBackground: $black;
 $borderColor: $grey;
-$titleColor: darkred;
+$titleColor: $white;
 $buttonColor: $grey2;
 $checkmarkColor: $green2;
 
@@ -26,4 +26,4 @@ $normalCards: $green;
 $mediumCards: $orange;
 $highCards: $red;
 $highestCards: $purple;
-$miscCards: $black;
+$miscCards: silver;

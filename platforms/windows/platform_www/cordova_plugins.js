@@ -19,6 +19,9 @@ module.exports = [
 ];
 module.exports.metadata = 
 // TOP OF METADATA
-{}
+{
+    "cordova-plugin-insomnia": "4.2.0",
+    "cordova-plugin-whitelist": "1.2.1"
+}
 // BOTTOM OF METADATA
 });

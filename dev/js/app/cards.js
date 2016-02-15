@@ -14,8 +14,12 @@ define([
 
   Cards.prototype = {
     init: function() {
+      var cards = this;
       console.log('Initialize Cards');
       $(document).on('click', '.poker-cards .card', $.proxy(this.selectCard, this));
+      $(document).on('click', '#revealCards', function() {
+        SOCKET.emit('reveal cards', {});
+      });
       $(document).on('click', '#reshuffle', $.proxy(this.reshuffle, this));
     },
     
@@ -107,7 +111,16 @@ define([
       $(EVENT_BUS).trigger('PlanningPoker.cards:showCards:done');
       this.showHighestOccurrence(json.highestOccurrence);
     },
-    
+
+    /**
+     * Tell the host to reveal cards
+     */
+    revealCards: function() {
+      if($('html.host').length > 0) {
+        SOCKET.emit('show cards', {highestOccurrence: this.getHighestOccurrence()});
+      }
+    },
+
     /**
      * Hide cards again. Effectively resets the game for the player.
      */

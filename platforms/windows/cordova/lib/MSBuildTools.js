@@ -17,12 +17,12 @@
        under the License.
 */
 
-var Q     = require('q');
-var path  = require('path');
-var shell = require('shelljs');
-var Version = require('./Version');
-var events = require('cordova-common').events;
-var spawn = require('cordova-common').superspawn.spawn;
+var Q     = require('Q'),
+    path  = require('path'),
+    exec  = require('./exec'),
+    shell = require('shelljs'),
+    spawn  = require('./spawn'),
+    Version = require('./Version');
 
 function MSBuildTools (version, path) {
     this.version = version;
@@ -30,9 +30,9 @@ function MSBuildTools (version, path) {
 }
 
 MSBuildTools.prototype.buildProject = function(projFile, buildType, buildarch, otherConfigProperties) {
-    events.emit('log', 'Building project: ' + projFile);
-    events.emit('log', '\tConfiguration : ' + buildType);
-    events.emit('log', '\tPlatform      : ' + buildarch);
+    console.log('Building project: ' + projFile);
+    console.log('\tConfiguration : ' + buildType);
+    console.log('\tPlatform      : ' + buildarch);
 
     var args = ['/clp:NoSummary;NoItemAndPropertyList;Verbosity=minimal', '/nologo',
     '/p:Configuration=' + buildType,
@@ -45,24 +45,23 @@ MSBuildTools.prototype.buildProject = function(projFile, buildType, buildarch, o
         });
     }
 
-    return spawn(path.join(this.path, 'msbuild'), [projFile].concat(args), { stdio: 'inherit' });
+    return spawn(path.join(this.path, 'msbuild'), [projFile].concat(args));
 };
 
 // returns full path to msbuild tools required to build the project and tools version
 module.exports.findAvailableVersion = function () {
-    var versions = ['15.0', '14.0', '12.0', '4.0'];
+    var versions = ['14.0', '12.0', '4.0'];
 
     return Q.all(versions.map(checkMSBuildVersion)).then(function (versions) {
         // select first msbuild version available, and resolve promise with it
-        var msbuildTools = versions[0] || versions[1] || versions[2] || versions[3];
+        var msbuildTools = versions[0] || versions[1] || versions[2];
 
         return msbuildTools ? Q.resolve(msbuildTools) : Q.reject('MSBuild tools not found');
     });
 };
 
 module.exports.findAllAvailableVersions = function () {
-    var versions = ['15.0', '14.0', '12.0', '4.0'];
-    events.emit('verbose', 'Searching for available MSBuild versions...');
+    var versions = ['14.0', '12.0', '4.0'];
 
     return Q.all(versions.map(checkMSBuildVersion)).then(function(unprocessedResults) {
         return unprocessedResults.filter(function(item) {
@@ -72,25 +71,21 @@ module.exports.findAllAvailableVersions = function () {
 };
 
 function checkMSBuildVersion(version) {
-    return spawn('reg', ['query', 'HKLM\\SOFTWARE\\Microsoft\\MSBuild\\ToolsVersions\\' + version, '/v', 'MSBuildToolsPath'])
+    var deferred = Q.defer();
+    exec('reg query HKLM\\SOFTWARE\\Microsoft\\MSBuild\\ToolsVersions\\' + version + ' /v MSBuildToolsPath')
     .then(function(output) {
         // fetch msbuild path from 'reg' output
-        var toolsPath = /MSBuildToolsPath\s+REG_SZ\s+(.*)/i.exec(output);
-        if (toolsPath) {
-            toolsPath = toolsPath[1];
-            // CB-9565: Windows 10 invokes .NET Native compiler, which only runs on x86 arch,
-            // so if we're running an x64 Node, make sure to use x86 tools.
-            if ((version === '15.0' || version === '14.0') && toolsPath.indexOf('amd64') > -1) {
-                toolsPath = path.resolve(toolsPath, '..');
-            }
-            events.emit('verbose', 'Found MSBuild v' + version + ' at ' + toolsPath);
-            return new MSBuildTools(version, toolsPath);
+        var path = /MSBuildToolsPath\s+REG_SZ\s+(.*)/i.exec(output);
+        if (path) {
+            deferred.resolve(new MSBuildTools(version, path[1]));
+            return;
         }
-    })
-    .catch(function (err) {
+        deferred.resolve(null); // not found
+    }, function (err) {
         // if 'reg' exits with error, assume that registry key not found
-        return;
+        deferred.resolve(null);
     });
+    return deferred.promise;
 }
 
 /// returns an array of available UAP Versions
@@ -118,5 +113,4 @@ function getAvailableUAPVersions() {
 
     return result;
 }
-
 module.exports.getAvailableUAPVersions = getAvailableUAPVersions;

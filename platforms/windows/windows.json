@@ -32,5 +32,9 @@
                 ""
             ]
         }
-    ]
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-insomnia": "4.2.0",
+        "cordova-plugin-whitelist": "1.2.1"
+    }
 }

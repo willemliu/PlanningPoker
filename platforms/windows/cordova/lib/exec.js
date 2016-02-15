@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
        Licensed to the Apache Software Foundation (ASF) under one
        or more contributor license agreements.  See the NOTICE file
@@ -19,16 +17,22 @@
        under the License.
 */
 
-var args = process.argv,
-    run   = require('./lib/run');
+var child_process = require('child_process'),
+    Q       = require('q');
 
-// Handle help flag
-if (['--help', '/?', '-h', 'help', '-help', '/help'].indexOf(args[2]) > -1) {
-    run.help();
-} else {
-    run.run(args).done(null, function (err) {
-        var errorMessage = (err && err.stack) ? err.stack : err;
-        console.error('ERROR: ' + errorMessage);
-        process.exit(2);
-    });
-}
+// Takes a command and optional current working directory.
+// Returns a promise that either resolves with the stdout, or
+// rejects with an error message and the stderr.
+module.exports = function(cmd, opt_cwd) {
+    var d = Q.defer();
+    try {
+        child_process.exec(cmd, {cwd: opt_cwd, maxBuffer: 1024000}, function(err, stdout, stderr) {
+            if (err) d.reject('Error executing "' + cmd + '": ' + stderr);
+            else d.resolve(stdout);
+        });
+    } catch(e) {
+        console.error('error caught: ' + e);
+        d.reject(e);
+    }
+    return d.promise;
+};

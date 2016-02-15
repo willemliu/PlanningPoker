@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
     <Identity Name="nl.willim.poker" Publisher="CN=$username$" Version="0.0.1.0" />
-    <mp:PhoneIdentity PhoneProductId="73bad380-d1ce-11e5-9b6a-91b7190fccf1" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
+    <mp:PhoneIdentity PhoneProductId="2cf8c310-d40a-11e5-8da3-91138a71d593" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
     <Properties>
         <DisplayName>PlanningPoker</DisplayName>
         <PublisherDisplayName>WilliM</PublisherDisplayName>
@@ -24,11 +24,6 @@
                     </m3:ShowNameOnTiles>
                 </m3:DefaultTile>
                 <m3:SplashScreen Image="images\SplashScreenPhone.png" />
-                <m3:InitialRotationPreference>
-                    <m3:Rotation Preference="portrait" />
-                    <m3:Rotation Preference="landscape" />
-                    <m3:Rotation Preference="landscapeFlipped" />
-                </m3:InitialRotationPreference>
             </m3:VisualElements>
         </Application>
     </Applications>

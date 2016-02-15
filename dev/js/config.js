@@ -22,6 +22,7 @@ var IS_APP = window.location.href.indexOf( 'http://' ) === -1 && window.location
 var EVENT_BUS = {};
 var SOCKET; // The one socket.io connection
 var BASE_URL = 'http://poker.willim.nl/';
+//var BASE_URL = '';
 var START_PAGE = '/';
 
 requirejs([
@@ -35,6 +36,11 @@ requirejs([
    * APP START
    */
   document.addEventListener('deviceready', function() {
+    if(IS_APP) {
+      window.plugins.insomnia.keepAwake(function() {
+        console.log('Insomnia');
+      });
+    }
     SOCKET = io('http://poker.willim.nl');
     // Switch to socket below when debugging locally.
     //SOCKET = io();
@@ -55,6 +61,7 @@ requirejs([
   if(!IS_APP) {
     DeviceReady.getInstance();
   } else {
+    // When is app
     START_PAGE = 'index.html';
   }
   

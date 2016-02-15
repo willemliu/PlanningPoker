@@ -24,6 +24,7 @@ define([
       SOCKET.on('msg', $.proxy(Rooms.getInstance().processMsg, Rooms.getInstance()));
       SOCKET.on('select card', $.proxy(Cards.getInstance().playerSelectedCard, Cards.getInstance()));
       SOCKET.on('show cards', $.proxy(Cards.getInstance().showCards, Cards.getInstance()));
+      SOCKET.on('reveal cards', $.proxy(Cards.getInstance().revealCards, Cards.getInstance()));
       SOCKET.on('reshuffle', $.proxy(Cards.getInstance().hideCards, Cards.getInstance()));
       SOCKET.on('host left', function() {
         alert('Host has left');
