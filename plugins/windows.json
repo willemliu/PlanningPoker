@@ -12,6 +12,12 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "PlanningPoker"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "PlanningPoker"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "PlanningPoker"
         }
     },
     "dependent_plugins": {}

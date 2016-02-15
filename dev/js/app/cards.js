@@ -27,7 +27,20 @@ define([
      * Resets the game for every player in the same room.
      */
     reshuffle: function() {
-      if(confirm('Reset the game?')) {
+      if(IS_APP) {
+        navigator.vibrate(200);
+        navigator.notification.confirm(
+          'Reset the game?',  // message
+          function(idx) {
+            if(idx === 1) {
+              SOCKET.emit('reshuffle');
+            }
+          },              // callback to invoke with index of button pressed
+          'Reset',            // title
+          ['yes','no']             // buttonLabels
+        );
+        
+      } else if(confirm('Reset the game?')) {
         SOCKET.emit('reshuffle');
       }
     },

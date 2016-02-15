@@ -27,8 +27,21 @@ define([
       SOCKET.on('reveal cards', $.proxy(Cards.getInstance().revealCards, Cards.getInstance()));
       SOCKET.on('reshuffle', $.proxy(Cards.getInstance().hideCards, Cards.getInstance()));
       SOCKET.on('host left', function() {
-        alert('Host has left');
-        window.location = START_PAGE;
+        if(IS_APP) {
+          navigator.vibrate(200);
+          navigator.notification.confirm(
+            'Host has left',  // message
+            function() {
+              window.location = START_PAGE;
+            },              // callback to invoke with index of button pressed
+            'Exit game',            // title
+            'Ok'             // buttonLabels
+          );
+          
+        } else {
+          alert('Host has left');
+          window.location = START_PAGE;
+        }
       });
     },
     
