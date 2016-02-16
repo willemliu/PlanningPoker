@@ -37,6 +37,11 @@ requirejs([
    */
   document.addEventListener('deviceready', function() {
     if(IS_APP) {
+      // Remove splash screen
+      if (navigator.splashscreen) {
+        navigator.splashscreen.hide();
+      }
+      // Keep awake
       window.plugins.insomnia.keepAwake(function() {
         console.log('Insomnia');
       });

@@ -18,6 +18,9 @@
         },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "PlanningPoker"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "PlanningPoker"
         }
     },
     "dependent_plugins": {}

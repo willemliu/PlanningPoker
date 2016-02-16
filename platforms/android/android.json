@@ -23,6 +23,10 @@
                         {
                             "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -50,6 +54,9 @@
             "PACKAGE_NAME": "nl.willim.poker"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "nl.willim.poker"
+        },
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "nl.willim.poker"
         }
     },
@@ -93,12 +100,21 @@
             "id": "cordova-plugin-whitelist.whitelist",
             "pluginId": "cordova-plugin-whitelist",
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "pluginId": "cordova-plugin-splashscreen",
+            "clobbers": [
+                "navigator.splashscreen"
+            ]
         }
     ],
     "plugin_metadata": {
         "cordova-plugin-dialogs": "1.2.0",
         "cordova-plugin-insomnia": "4.2.0",
         "cordova-plugin-vibration": "2.1.0",
-        "cordova-plugin-whitelist": "1.2.1"
+        "cordova-plugin-whitelist": "1.2.1",
+        "cordova-plugin-splashscreen": "3.2.0"
     }
 }
