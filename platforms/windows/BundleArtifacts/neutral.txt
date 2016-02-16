@@ -1,0 +1,1 @@
+MainPackage=D:\projects\PlanningPoker\platforms\windows\build\windows\debug\anycpu\CordovaApp.Windows10_0.0.1.0_anycpu_debug.appx

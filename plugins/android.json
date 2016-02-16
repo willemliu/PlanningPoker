@@ -1,0 +1,24 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "nl.willim.poker"
+        },
+        "cordova-plugin-insomnia": {
+            "PACKAGE_NAME": "nl.willim.poker"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "nl.willim.poker"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "nl.willim.poker"
+        }
+    },
+    "dependent_plugins": {}
+}

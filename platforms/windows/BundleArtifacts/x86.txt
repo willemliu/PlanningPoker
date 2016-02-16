@@ -1,1 +1,1 @@
-MainPackage=D:\projects\PlanningPoker\platforms\windows\build\windows\Release\x86\CordovaApp.Windows10_1.1.0.0_x86.appx
+MainPackage=D:\projects\PlanningPoker\platforms\windows\build\windows\debug\anycpu\x86\CordovaApp.Windows10\CordovaApp.Windows10_0.0.1.0_x86_debug.appx
