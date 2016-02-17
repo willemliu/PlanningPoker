@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.willim.poker" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="nl.willim.poker" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>PlanningPoker</name>
     <description>
         PlanningPoker is an app to facilitate the Planning Poker sessions for Agile Development.
@@ -16,6 +16,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="windows-target-version" value="10.0" />
     <preference name="windows-phone-target-version" value="10.0" />
