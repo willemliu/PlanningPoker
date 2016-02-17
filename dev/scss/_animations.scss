@@ -100,9 +100,34 @@
 @-webkit-keyframes fade-in {
     0% { opacity: 0; }
     100% { opacity: 1; }
-}@keyframes fade-in {
+}
+@keyframes fade-in {
     0% { opacity: 0; }
     100% { opacity: 1; }
+}
+
+.show-message.message {
+  opacity: 0;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-name: show-message;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-iteration-count: 1;
+  animation-duration: 10s;
+  animation-name: show-message;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+@-webkit-keyframes show-message {
+    0% { opacity: 0; }
+    25% { opacity: 1; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+@keyframes show-message {
+    0% { opacity: 0; }
+    25% { opacity: 1; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 .slide-out-right {

@@ -66,10 +66,10 @@
         <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
         <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
         <UapDefaultAssetScale>100</UapDefaultAssetScale>
-        <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+        <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
         <AppxBundle>Always</AppxBundle>
         <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-        <PackageCertificateThumbprint>806DCB71D4542DF11BDF174CA61907DA4ECF46B8</PackageCertificateThumbprint>
+        <PackageCertificateThumbprint>CB606309C05E77EC4197C1B03CC318316AC2ED44</PackageCertificateThumbprint>
         <PackageCertificateKeyFile>CordovaApp.Windows10_StoreKey.pfx</PackageCertificateKeyFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(VisualStudioVersion)' &lt; '14.0'">

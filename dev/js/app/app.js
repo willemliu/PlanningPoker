@@ -6,9 +6,10 @@ define([
   'mustache',
   'app/appFlow',
   'app/cards',
+  'app/message',
   'app/rooms',
   'app/socketConfig'
-], function($, Mustache, AppFlow, Cards, Rooms, SocketConfig) {
+], function($, Mustache, AppFlow, Cards, Message, Rooms, SocketConfig) {
   var instance = null;
   
   function App(){
@@ -34,6 +35,7 @@ define([
       Rooms.getInstance();
       $(EVENT_BUS).on('PlanningPoker.appFlow:showCards:done', function() {
         Cards.getInstance();
+        Message.getInstance();
       });
     },
     

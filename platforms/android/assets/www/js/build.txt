@@ -6,6 +6,7 @@ lib/socket.io.js
 lib/mustache.js
 app/appFlow.js
 app/cards.js
+app/message.js
 app/rooms.js
 app/players.js
 app/socketConfig.js

@@ -18,7 +18,22 @@ define([
       console.log('Initialize Cards');
       $(document).on('click', '.poker-cards .card', $.proxy(this.selectCard, this));
       $(document).on('click', '#revealCards', function() {
-        SOCKET.emit('reveal cards', {});
+        if(IS_APP) {
+          navigator.vibrate(200);
+          navigator.notification.confirm(
+            'Show cards?',  // message
+            function(idx) {
+              if(idx === 1) {
+                SOCKET.emit('reveal cards', {});
+              }
+            },              // callback to invoke with index of button pressed
+            'Show cards',            // title
+            ['yes','no']             // buttonLabels
+          );
+          
+        } else if(confirm('Show cards?')) {
+          SOCKET.emit('reveal cards', {});
+        }
       });
       $(document).on('click', '#reshuffle', $.proxy(this.reshuffle, this));
     },

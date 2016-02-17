@@ -1,0 +1,38 @@
+.message {
+ display: none;
+  position: absolute;
+  padding: 20px 20px;
+  text-align: center;
+  background-color: $white;
+  color: black;
+  border: 3px solid #666;
+  border-radius: 58px;
+  font-size: 1rem;
+  bottom: 50px;
+  left: 0px;
+  white-space: nowrap;
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    background-color: $white;
+    left: 45%;
+    top: 55px;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #666;
+    border-radius: 30px;
+  }
+  
+  &:after {
+    width: 20px;
+    height: 20px;
+    left: 40%;
+    top: 75px;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    border-radius: 18px;
+  }
+}
+&.show-message.message {
+  display: inline-block !important;
+}

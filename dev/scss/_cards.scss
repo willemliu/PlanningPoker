@@ -10,9 +10,9 @@
       font-size: 1.5rem;
       font-weight: bold;
       border: 2px solid $normalCards;
-      height: 75px;
-      min-width: 75px;
-      max-width: 75px;
+      height: 50px;
+      min-width: 50px;
+      max-width: 50px;
       display: table;
       cursor: pointer;
       margin: .1rem;
@@ -47,11 +47,7 @@
         border-color: $miscCards;
       }
       
-      &.coffee > div {
-        &:before {
-          content: 'Coffee';
-          font-size: 1rem;
-        }
+      &.coffee {
         background-image: url('/img/coffee.png');
         background-repeat: no-repeat;
         background-size: contain;
