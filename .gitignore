@@ -2,5 +2,4 @@ node_modules
 build/
 AppPackages/
 www/
-www/js/
 *.apk
