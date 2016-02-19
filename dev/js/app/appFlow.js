@@ -46,7 +46,8 @@ define([
         $(this).hide();
         $(this).removeClass('blink slide-out-right fade-out');
         $('.room').addClass('slide-in-bottom fade-in');
-        $('footer').addClass('slide-in-bottom fade-in');
+        //$('footer').addClass('slide-in-bottom fade-in');
+        $('footer').fadeIn();
       });
       $(EVENT_BUS).trigger('PlanningPoker.appFlow:showNewRoom:done');
     },
@@ -58,7 +59,8 @@ define([
         $(this).hide();
         $(this).removeClass('blink slide-out-right fade-out');
         $('.seat').addClass('slide-in-bottom fade-in');
-        $('footer').addClass('slide-in-bottom fade-in');
+        //$('footer').addClass('slide-in-bottom fade-in');
+        $('footer').fadeIn();
       });
       $(EVENT_BUS).trigger('PlanningPoker.appFlow:showCards:done');
     },

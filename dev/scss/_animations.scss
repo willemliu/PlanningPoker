@@ -1,4 +1,11 @@
 .blink {
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: blink;
   -webkit-animation-fill-mode: forwards;
@@ -35,6 +42,14 @@
   position: relative;
   left: 0;
   right: 0;
+
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: shake;
   -webkit-animation-fill-mode: forwards;
@@ -69,6 +84,14 @@
 
 .fade-out {
   opacity: 1;
+
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: fade-out;
   -webkit-animation-fill-mode: forwards;
@@ -88,6 +111,14 @@
 
 .fade-in {
   opacity: 0;
+
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: fade-in;
   -webkit-animation-fill-mode: forwards;
@@ -108,6 +139,14 @@
 
 .show-message.message {
   opacity: 0;
+  
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: 10s;
   -webkit-animation-name: show-message;
   -webkit-animation-fill-mode: forwards;
@@ -134,6 +173,14 @@
   position: relative;
   left: 0;
   right: 0;
+
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: slide-out-right, fade-out;
   -webkit-animation-fill-mode: forwards;
@@ -155,6 +202,14 @@
   position: relative;
   left: 0;
   right: 0;
+  
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: slide-out-left, fade-out;
   -webkit-animation-fill-mode: forwards;
@@ -176,6 +231,14 @@
   position: relative;
   left: 0;
   right: 0;
+
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: slide-out-bottom, fade-out;
   -webkit-animation-fill-mode: forwards;
@@ -197,6 +260,14 @@
   position: relative;
   left: 0;
   right: 0;
+  
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: slide-out-top, fade-out;
   -webkit-animation-fill-mode: forwards;
@@ -220,6 +291,14 @@
   top: 100vh;
   left: 0;
   right: 0;
+
+  // Force hardware acceleration
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
   -webkit-animation-duration: .5s;
   -webkit-animation-name: slide-in-bottom, fade-in;
   -webkit-animation-fill-mode: forwards;
