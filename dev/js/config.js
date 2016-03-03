@@ -21,8 +21,8 @@ requirejs.config({
 var IS_APP = window.location.href.indexOf( 'http://' ) === -1 && window.location.href.indexOf( 'https://' ) === -1;
 var EVENT_BUS = {};
 var SOCKET; // The one socket.io connection
-var BASE_URL = 'http://poker.willim.nl/';
-//var BASE_URL = '';
+//var BASE_URL = 'http://poker.willim.nl/';
+var BASE_URL = '';
 var START_PAGE = '/';
 
 requirejs([
@@ -46,9 +46,34 @@ requirejs([
         console.log('Insomnia');
       });
     }
-    SOCKET = io('http://poker.willim.nl');
+    //SOCKET = io('http://poker.willim.nl');
     // Switch to socket below when debugging locally.
-    //SOCKET = io();
+    SOCKET = io();
+    SOCKET.on('connect', function() {
+      if($('#name').val().length > 0 && $('#roomNumber').val().length > 0) {
+        SOCKET.emit('joinRoom', { 
+          name: $('#name').val(), 
+          roomNumber: $('#roomNumber').val()
+        }, function(json) {
+          roomNumber = json.roomNumber;
+          if(typeof(json.msg) != 'undefined') {
+            $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:joined', [$('.join-room'), json]);
+            $('.username').text(json.name);
+          } else {
+            $(EVENT_BUS).trigger('PlanningPoker.room:joinRoom:error', $('#roomNumber'));
+          }
+        });
+      }
+    });
+    SOCKET.on('reconnect', function() {
+      console.log('reconnect');
+    });
+    SOCKET.on('disconnect', function() {
+      console.log('disconnect');
+    });
+    SOCKET.on('error', function() {
+      console.log('error');
+    });
     App.getInstance();
     
     // When browser closes
