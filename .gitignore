@@ -3,3 +3,4 @@ build/
 AppPackages/
 www/
 *.apk
+.sass-cache
