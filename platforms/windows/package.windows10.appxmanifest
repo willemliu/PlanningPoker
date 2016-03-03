@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Package IgnorableNamespaces="uap mp" xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
-    <Identity Name="nl.willim.poker" Publisher="CN=37CCEBFC-1FA9-4248-BEF7-7455A1551028" Version="1.1.4.0" />
+    <Identity Name="nl.willim.poker" Publisher="CN=37CCEBFC-1FA9-4248-BEF7-7455A1551028" Version="1.1.5.0" />
     <mp:PhoneIdentity PhoneProductId="2cf8c310-d40a-11e5-8da3-91138a71d593" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
     <Properties>
         <DisplayName>PlanningPoker</DisplayName>
