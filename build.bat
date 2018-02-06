@@ -1,0 +1,1 @@
+cd dev & gulp & gulp releaseApp & cd .. & cordova build --release windows android firefoxos

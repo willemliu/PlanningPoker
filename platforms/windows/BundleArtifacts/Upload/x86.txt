@@ -1,0 +1,1 @@
+MainPackage=D:\projects\PlanningPoker\platforms\windows\build\windows\Release\x86\Upload\CordovaApp.Windows10_1.1.6.0_x86.appx
